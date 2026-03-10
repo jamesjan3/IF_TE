@@ -1,0 +1,23 @@
+# Python cache and bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+sklearn-env/
+venv/
+.env/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Output files
+*.out
+*.log
+
+# System files
+.DS_Store
+
+# Large generated CSVs (too big for GitHub)
+*.csv

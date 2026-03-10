@@ -20,6 +20,7 @@ averaged across folds, ranked per output.
 
 import numpy as np
 import pandas as pd
+import os
 from sklearn.linear_model import RidgeCV
 from sklearn.multioutput import MultiOutputRegressor
 from sklearn.preprocessing import StandardScaler
@@ -29,7 +30,8 @@ from sklearn.metrics import r2_score, mean_squared_error
 
 # ── Config ─────────────────────────────────────────────────────────────────────
 
-INPUT_FILE = "merged_features.csv"
+script_dir = os.path.dirname(os.path.abspath(__file__))
+INPUT_FILE = os.path.join(script_dir, "..", "..", "merged_features.csv")
 
 TARGET_COLS = {
     "eIF3d": ("eIF3d_control_logTE", "eIF3d_depletion_logTE"),
@@ -45,8 +47,8 @@ feature_subsets = {
         "cds_wobble_A_pct", "cds_wobble_C_pct",
         "cds_wobble_G_pct", "cds_wobble_T_pct",
     ],
-    "lengths":        ["tx_length", "utr5_length", "cds_length", "utr3_length"],
-    "region_lengths": ["utr3_length", "cds_length"],
+    "lengths":        ["tx_length", "utr5_fraction", "cds_fraction", "utr3_fraction"],
+    "non5_lengths": ["tx_length", "cds_fraction"],
     "kozak": [
         "-3_A", "-3_C", "-3_G",
         "-2_A", "-2_C", "-2_G",

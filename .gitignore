@@ -15,9 +15,7 @@ venv/
 # Output files
 *.out
 *.log
+*.csv
 
 # System files
 .DS_Store
-
-# Large generated CSVs (too big for GitHub)
-*.csv

@@ -6,10 +6,10 @@ How to Run
 
 we did it this way because we each worked on feature extractions separately:
   length features (Jannes)
-  Nucleotide frequency (Anushka)
+  Nucleotide frequency (Anuschka)
   Codon and aa frequency (Oliver)
   K-mer frequency (Jannes)
-  Wobble position (Anushka)
+  Wobble position (Anuschka)
   one-hot encoding of nt around start codon (Jannes)
   Counts of 20 relevant dicodons according to Gamble et al (Jannes)
   Secondary structure values (Oliver)

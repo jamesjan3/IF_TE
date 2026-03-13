@@ -24,6 +24,7 @@ averaged across folds, ranked per output. Zero-coefficient features
 (zeroed out by L1) are reported separately.
 """
 
+import os
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import ElasticNetCV
@@ -35,7 +36,8 @@ from sklearn.metrics import r2_score, mean_squared_error
 
 # ── Config ─────────────────────────────────────────────────────────────────────
 
-INPUT_FILE = "merged_features.csv"
+script_dir = os.path.dirname(os.path.abspath(__file__))
+INPUT_FILE = os.path.join(script_dir, "..", "..", "merged_features.csv")
 
 TARGET_COLS = {
     "eIF3d": ("eIF3d_control_logTE", "eIF3d_depletion_logTE"),

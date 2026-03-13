@@ -19,3 +19,7 @@ venv/
 
 # System files
 .DS_Store
+
+# Claude Code
+.claude/
+*.md

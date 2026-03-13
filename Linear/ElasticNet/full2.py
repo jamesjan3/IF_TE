@@ -1,6 +1,6 @@
 """
-train_linear.py
----------------
+full.py
+-------
 Trains a multi-output ElasticNet regression model to predict:
     target = log(TE_control / TE_depletion)
            = eIF_control_logTE - eIF_depletion_logTE
@@ -22,8 +22,11 @@ inner CV on each training fold.
 Feature importance: standardized coefficients (coef × feature std),
 averaged across folds, ranked per output. Zero-coefficient features
 (zeroed out by L1) are reported separately.
+
+All feature subsets are included (full model).
 """
 
+import os
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import ElasticNetCV
@@ -35,7 +38,8 @@ from sklearn.metrics import r2_score, mean_squared_error
 
 # ── Config ─────────────────────────────────────────────────────────────────────
 
-INPUT_FILE = "merged_features.csv"
+script_dir = os.path.dirname(os.path.abspath(__file__))
+INPUT_FILE = os.path.join(script_dir, "..", "..", "merged_features.csv")
 
 TARGET_COLS = {
     "eIF3d": ("eIF3d_control_logTE", "eIF3d_depletion_logTE"),
@@ -78,8 +82,15 @@ DYNAMIC_SUBSETS = {
     "utr3_k4":    "utr3_k4",
 }
 
-# ── Edit here to change which features are used ────────────────────────────────
-ACTIVE_SUBSETS = ["utr5_nt", "cds_nt", "utr3_nt", "lengths", "kozak", "codon_freq", "aa_freq", "utr5_k2", "utr5_k3", "utr5_k4","cds_k2","cds_k3","cds_k4","utr3_k2","utr3_k3","utr3_k4"]
+# ── All feature subsets active ─────────────────────────────────────────────────
+ACTIVE_SUBSETS = [
+    "utr5_nt", "cds_nt", "utr3_nt", "lengths", "kozak",
+    "codon_freq", "aa_freq",
+    "utr5_k2", "utr5_k3", "utr5_k4",
+    "cds_k2",  "cds_k3",  "cds_k4",
+    "utr3_k2", "utr3_k3", "utr3_k4",
+    "min_dg", "cds_wobble_nt",
+]
 # ──────────────────────────────────────────────────────────────────────────────
 
 N_SPLITS       = 5                          # 5-fold = 80/20 splits
@@ -89,7 +100,7 @@ L1_RATIOS      = [0.1, 0.3, 0.5, 0.7, 0.9, 0.95, 1.0]
 # ElasticNetCV derives alpha_max from the data and builds a log-spaced grid
 # downward. This is always appropriate regardless of dimensionality, avoiding
 # convergence failures that occur when manually supplying too-small alphas.
-ALPHAS         = 40    # size of auto-computed alpha grid per fold
+ALPHAS         = 100    # size of auto-computed alpha grid per fold
 TOP_N_FEATURES = 10
 
 # ── Load data ──────────────────────────────────────────────────────────────────
@@ -164,17 +175,20 @@ for fold, (train_idx, test_idx) in enumerate(kf.split(X), 1):
     Y_train, Y_test = Y[train_idx], Y[test_idx]
 
     # ElasticNetCV tunes alpha and l1_ratio jointly via inner CV on the training fold.
+    # n_jobs on ElasticNetCV (parallelises over folds/alphas), NOT on MultiOutputRegressor,
+    # to avoid nested parallelism deadlocks.
     pipeline = Pipeline([
         ("scaler", StandardScaler()),
         ("model",  MultiOutputRegressor(
             ElasticNetCV(
                 l1_ratio   = L1_RATIOS,
                 alphas     = ALPHAS,    # int = size of auto-computed grid
-                cv         = 3,
-                max_iter   = 50000,
+                cv         = 5,
+                max_iter   = 100000,
                 tol        = 1e-4,
                 n_jobs     = -1,        # parallelise over CV folds/l1_ratios
             ),
+            n_jobs = 1,                 # NOT here — avoids nested parallelism
         ))
     ])
     pipeline.fit(X_train, Y_train)

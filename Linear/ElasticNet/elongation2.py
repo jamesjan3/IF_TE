@@ -1,6 +1,6 @@
 """
-train_linear.py
----------------
+elongation2.py
+--------------
 Trains a multi-output ElasticNet regression model to predict:
     target = log(TE_control / TE_depletion)
            = eIF_control_logTE - eIF_depletion_logTE
@@ -22,8 +22,11 @@ inner CV on each training fold.
 Feature importance: standardized coefficients (coef × feature std),
 averaged across folds, ranked per output. Zero-coefficient features
 (zeroed out by L1) are reported separately.
+
+Elongation-related subsets only: cds_wobble_nt, kozak, min_dg.
 """
 
+import os
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import ElasticNetCV
@@ -35,7 +38,8 @@ from sklearn.metrics import r2_score, mean_squared_error
 
 # ── Config ─────────────────────────────────────────────────────────────────────
 
-INPUT_FILE = "merged_features.csv"
+script_dir = os.path.dirname(os.path.abspath(__file__))
+INPUT_FILE = os.path.join(script_dir, "..", "..", "merged_features.csv")
 
 TARGET_COLS = {
     "eIF3d": ("eIF3d_control_logTE", "eIF3d_depletion_logTE"),
@@ -79,7 +83,7 @@ DYNAMIC_SUBSETS = {
 }
 
 # ── Edit here to change which features are used ────────────────────────────────
-ACTIVE_SUBSETS = ["cds_nt", "utr3_nt", "non5_lengths"]
+ACTIVE_SUBSETS = ["cds_wobble_nt", "kozak", "min_dg"]
 # ──────────────────────────────────────────────────────────────────────────────
 
 N_SPLITS       = 5                          # 5-fold = 80/20 splits

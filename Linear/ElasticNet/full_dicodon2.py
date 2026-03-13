@@ -1,6 +1,6 @@
 """
-full.py
--------
+full_dicodon2.py
+----------------
 Trains a multi-output ElasticNet regression model to predict:
     target = log(TE_control / TE_depletion)
            = eIF_control_logTE - eIF_depletion_logTE
@@ -23,7 +23,7 @@ Feature importance: standardized coefficients (coef × feature std),
 averaged across folds, ranked per output. Zero-coefficient features
 (zeroed out by L1) are reported separately.
 
-All feature subsets are included (full model).
+All feature subsets including dicodon density features.
 """
 
 import os
@@ -56,7 +56,7 @@ feature_subsets = {
         "cds_wobble_A_pct", "cds_wobble_C_pct",
         "cds_wobble_G_pct", "cds_wobble_T_pct",
     ],
-    "lengths":        ["tx_length", "utr5_fraction", "cds_fraction", "utr3_fraction"],
+    "lengths":      ["tx_length", "utr5_fraction", "cds_fraction", "utr3_fraction"],
     "non5_lengths": ["tx_length", "cds_fraction"],
     "kozak": [
         "-3_A", "-3_C", "-3_G",
@@ -65,6 +65,7 @@ feature_subsets = {
         "+4_A", "+4_C", "+4_G",
         "+5_A", "+5_C", "+5_G",
     ],
+    "dicodon": ["dicodon_count", "dicodon_density"],
 }
 
 # Dynamic subsets: defined by column prefix, expanded after data load
@@ -89,17 +90,12 @@ ACTIVE_SUBSETS = [
     "utr5_k2", "utr5_k3", "utr5_k4",
     "cds_k2",  "cds_k3",  "cds_k4",
     "utr3_k2", "utr3_k3", "utr3_k4",
-    "min_dg", "cds_wobble_nt",
+    "min_dg", "cds_wobble_nt", "dicodon",
 ]
 # ──────────────────────────────────────────────────────────────────────────────
 
 N_SPLITS       = 5                          # 5-fold = 80/20 splits
-# l1_ratio grid: 0=Ridge, 1=Lasso; values near 1 encourage sparsity
 L1_RATIOS      = [0.1, 0.3, 0.5, 0.7, 0.9, 0.95, 1.0]
-# ALPHAS: number of alphas in the auto-computed grid.
-# ElasticNetCV derives alpha_max from the data and builds a log-spaced grid
-# downward. This is always appropriate regardless of dimensionality, avoiding
-# convergence failures that occur when manually supplying too-small alphas.
 ALPHAS         = 40    # size of auto-computed alpha grid per fold
 TOP_N_FEATURES = 10
 

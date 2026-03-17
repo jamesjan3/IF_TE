@@ -72,7 +72,7 @@ DYNAMIC_SUBSETS = {
     "utr3_k4":    "utr3_k4",
 }
 
-ACTIVE_SUBSETS = ["utr5_nt", "cds_nt", "utr3_nt", "lengths", "kozak", "codon_freq", "aa_freq", "utr5_k2", "utr5_k3", "utr5_k4","cds_k2","cds_k3","cds_k4","utr3_k2","utr3_k3","utr3_k4"]
+ACTIVE_SUBSETS = ["utr5_nt", "cds_nt", "utr3_nt", "lengths", "codon_freq", "aa_freq", "utr5_k2", "utr5_k3", "utr5_k4","cds_k2","cds_k3","cds_k4","utr3_k2","utr3_k3","utr3_k4"]
 
 N_SPLITS       = 5                      
 ALPHAS         = np.logspace(-3, 4, 50)

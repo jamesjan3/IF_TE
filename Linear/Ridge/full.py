@@ -1,5 +1,5 @@
 """
-train_linear.py
+full_dicodon.py
 ---------------
 Trains a multi-output Ridge regression model to predict:
     target = log(TE_control / TE_depletion)
@@ -16,6 +16,8 @@ leave-one-out CV internally on each training fold.
 
 Feature importance: standardized coefficients (coef × feature std),
 averaged across folds, ranked per output.
+
+All feature subsets including dicodon density features.
 """
 
 import numpy as np
@@ -47,7 +49,7 @@ feature_subsets = {
         "cds_wobble_A_pct", "cds_wobble_C_pct",
         "cds_wobble_G_pct", "cds_wobble_T_pct",
     ],
-    "lengths":        ["tx_length", "utr5_fraction", "cds_fraction", "utr3_fraction"],
+    "lengths":      ["tx_length", "utr5_fraction", "cds_fraction", "utr3_fraction"],
     "non5_lengths": ["tx_length", "cds_fraction"],
     "kozak": [
         "-3_A", "-3_C", "-3_G",
@@ -56,6 +58,7 @@ feature_subsets = {
         "+4_A", "+4_C", "+4_G",
         "+5_A", "+5_C", "+5_G",
     ],
+    "dicodon": ["dicodon_count", "dicodon_density"],
 }
 
 DYNAMIC_SUBSETS = {
@@ -72,9 +75,9 @@ DYNAMIC_SUBSETS = {
     "utr3_k4":    "utr3_k4",
 }
 
-ACTIVE_SUBSETS = ["utr5_nt", "cds_nt", "utr3_nt", "lengths", "kozak", "codon_freq", "aa_freq", "utr5_k2", "utr5_k3", "utr5_k4","cds_k2","cds_k3","cds_k4","utr3_k2","utr3_k3","utr3_k4", "min_dg", "cds_wobble_nt"]
+ACTIVE_SUBSETS = ["utr5_nt", "cds_nt", "utr3_nt", "lengths", "kozak", "codon_freq", "aa_freq", "utr5_k2", "utr5_k3", "utr5_k4", "cds_k2", "cds_k3", "cds_k4", "utr3_k2", "utr3_k3", "utr3_k4", "min_dg", "cds_wobble_nt", "dicodon"]
 
-N_SPLITS       = 5                      
+N_SPLITS       = 5
 ALPHAS         = np.logspace(-3, 4, 50)
 TOP_N_FEATURES = 10
 

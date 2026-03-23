@@ -99,7 +99,7 @@ feature_columns = [
 df_nuc_features = df_features[["Name"] + feature_columns]
 
 # Save to CSV
-df_nuc_features.to_csv("nucleotide_features.csv", index=False)
+df_nuc_features.to_csv("nucleotide_frequency.csv", index=False)
 
 print("CSV saved")
 

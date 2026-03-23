@@ -22,7 +22,7 @@ venv/
 
 # Claude Code
 .claude/
-*.md
+CLAUDE.md
 
 # Anaconda
 anaconda_projects/

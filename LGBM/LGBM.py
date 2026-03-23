@@ -10,7 +10,9 @@ from lightgbm import LGBMRegressor
 
 #Import merged dataframe
 
-df = pd.read_csv("merged_features.csv")
+script_dir = os.path.dirname(os.path.abspath(__file__))
+INPUT_FILE = os.path.join(script_dir, "..", "merged_features.csv")
+df = pd.read_csv(INPUT_FILE)
 
 ID_COL = "sample_id" if "sample_id" in df.columns else None
 

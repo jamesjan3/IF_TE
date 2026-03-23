@@ -23,3 +23,9 @@ venv/
 # Claude Code
 .claude/
 *.md
+
+# Anaconda
+anaconda_projects/
+
+# LaTeX
+*.tex

@@ -21,7 +21,7 @@ print(f"fraction row sums — min: {row_sums.min():.6f}, max: {row_sums.max():.6
 if not (row_sums.between(1 - 1e-9, 1 + 1e-9)).all():
     print("WARNING: some rows do not sum to 1!")
 else:
-    print("all rows sum to 1 ✓")
+    print("all rows sum to 1")
 
 df.to_csv(OUTPUT_FILE, index=False)
-print(f"saved → {OUTPUT_FILE}  ({len(df):,} rows)")
+print(f"saved to {OUTPUT_FILE}  ({len(df):,} rows)")

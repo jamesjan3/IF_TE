@@ -68,5 +68,4 @@ with open(OUT_PATH, "w", newline="") as f:
         if (i + 1) % 1000 == 0:
             print(f"[{i+1}] processed", flush=True)
 
-print("Done.")
 print(f"Saved to {OUT_PATH}")

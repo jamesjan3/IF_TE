@@ -1,3 +1,7 @@
+# Translational Efficiency Prediction
+
+This project predicts the **translational efficiency (TE)** of genes from RNA sequence features using machine learning. It models log-transformed TE values under eIF3d and eIF4e depletion conditions with Ridge regression, ElasticNet, and LightGBM models. Features are extracted from transcript sequences and merged into a single dataset for training.
+
 # How to Run
 
 1. Unzip `TE_eIF_depletion.zip`
